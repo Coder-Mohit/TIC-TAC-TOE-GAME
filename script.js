@@ -6,6 +6,25 @@ let res = document.querySelector("#reset");
 let count = 0;
 let x = 0;
 let o = 0;
+const winningCombinations = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+];
+
+const checkWinner = () => {
+  return winningCombinations.some(combination => {
+    const [a, b, c] = combination;
+    return boxes[a].innerText !== "" && 
+           boxes[a].innerText === boxes[b].innerText && 
+           boxes[b].innerText === boxes[c].innerText;
+  });
+};
 
 res.addEventListener("click", () => {
     scoreX.innerText = 0;
@@ -26,15 +45,10 @@ for (let box of boxes) {
 
             // Switch player
             a = (a === "X") ? "O" : "X";
-
-            if ((boxes[0].innerText !== "" && boxes[0].innerText === boxes[1].innerText && boxes[1].innerText === boxes[2].innerText) ||
-                (boxes[3].innerText !== "" && boxes[3].innerText === boxes[4].innerText && boxes[4].innerText === boxes[5].innerText) ||
-                (boxes[6].innerText !== "" && boxes[6].innerText === boxes[7].innerText && boxes[7].innerText === boxes[8].innerText) || 
-                (boxes[0].innerText !== "" && boxes[0].innerText === boxes[3].innerText && boxes[3].innerText === boxes[6].innerText) ||
-                (boxes[1].innerText !== "" && boxes[1].innerText === boxes[4].innerText && boxes[4].innerText === boxes[7].innerText) ||
-                (boxes[2].innerText !== "" && boxes[2].innerText === boxes[5].innerText && boxes[5].innerText === boxes[8].innerText) || 
-                (boxes[0].innerText !== "" && boxes[0].innerText === boxes[4].innerText && boxes[4].innerText === boxes[8].innerText) ||
-                (boxes[2].innerText !== "" && boxes[2].innerText === boxes[4].innerText && boxes[4].innerText === boxes[6].innerText)) {
+            
+            const winner = checkWinner();
+            
+            if (winner) {
 
                 // Winner found, disable further clicks
                 document.querySelectorAll('.box').forEach(box => box.classList.add('disabled'));
